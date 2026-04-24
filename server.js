@@ -18,10 +18,6 @@ const PORT = process.env.PORT || 5000;
 // ✅ CORS Middleware - should be before routes
 app.use(cors({
   origin: [
-    'http://localhost:5173',        
-    'https://pjmtr.in' ,
-    'https://www.pjmtr.in',
-     'https://www.pjmtr.in/',
     'https://darkslateblue-pony-528056.hostingersite.com'
   ],
   credentials: true,
