@@ -22,6 +22,7 @@ app.use(cors({
     'https://pjmtr.in' ,
     'https://www.pjmtr.in',
      'https://www.pjmtr.in/'
+    'https://darkslateblue-pony-528056.hostingersite.com'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
