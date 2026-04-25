@@ -9,8 +9,8 @@ const Admin = require('./Models/Admin');
   try {
     await mongoose.connect(process.env.MONGO_URI);
 
-    const email = 'editors@pjmtr.in';
-    const password = 'Agpj@2026';
+    const email = 'editor@pjmtr.in';
+    const password = 'Agpj@2025';
 
     // 🗑️ Delete old admin (specific one)
    await Admin.deleteMany({
