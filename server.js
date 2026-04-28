@@ -57,7 +57,8 @@ app.get("/paper/view/:id", async (req, res) => {
       "Content-Disposition": "inline; filename=paper.pdf",
     });
 
-    res.end(paper.pdf.data);
+    // ✅ FIX
+    res.end(Buffer.from(paper.pdf.data));
 
   } catch (error) {
     console.error(error);
