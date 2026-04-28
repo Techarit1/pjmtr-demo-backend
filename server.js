@@ -68,25 +68,27 @@ app.get("/paper/view/:id", async (req, res) => {
       return res.status(404).send("PDF not found");
     }
 
-    res.set({
-      "Content-Type": "application/pdf",
-      "Content-Disposition": "inline; filename=paper.pdf",
-    });
+res.set({
+  "Content-Type": "application/pdf",
+  "Content-Disposition": "inline; filename=paper.pdf",
+});
 
-    // ✅ FINAL FIX
-    const pdfData = paper.pdf;
+const pdfData = paper.pdf;
 
-let bufferData;
+let finalBuffer;
 
+// 🔥 HANDLE ALL CASES
 if (pdfData.buffer) {
-  bufferData = pdfData.buffer;
+  finalBuffer = Buffer.from(pdfData.buffer);
+} else if (pdfData instanceof ArrayBuffer) {
+  finalBuffer = Buffer.from(pdfData);
 } else if (pdfData.data) {
-  bufferData = Buffer.from(pdfData.data);
+  finalBuffer = Buffer.from(pdfData.data);
 } else {
-  bufferData = Buffer.from(pdfData);
+  finalBuffer = Buffer.from(pdfData);
 }
 
-res.end(bufferData);
+res.end(finalBuffer);
 
   } catch (error) {
     console.error(error);
