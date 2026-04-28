@@ -46,10 +46,23 @@ const Paper = require("./Models/Paper"); // 👈 ensure path correct
 
 app.get("/paper/view/:id", async (req, res) => {
   try {
-    const paper = await Paper.findById(req.params.id);
+    const volume = await Volume.findOne({
+      "issues.papers._id": req.params.id
+    });
 
-    console.log("ID:", req.params.id);
-    console.log("PAPER:", paper);
+    if (!volume) {
+      return res.status(404).send("Paper not found");
+    }
+
+    let paper = null;
+
+    volume.issues.forEach(issue => {
+      issue.papers.forEach(p => {
+        if (p._id.toString() === req.params.id) {
+          paper = p;
+        }
+      });
+    });
 
     if (!paper || !paper.pdf) {
       return res.status(404).send("PDF not found");
@@ -60,7 +73,8 @@ app.get("/paper/view/:id", async (req, res) => {
       "Content-Disposition": "inline; filename=paper.pdf",
     });
 
-    res.end(Buffer.from(paper.pdf.data));
+    // 🔥 FINAL FIX
+    res.end(Buffer.from(paper.pdf));
 
   } catch (error) {
     console.error(error);
