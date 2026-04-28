@@ -74,12 +74,19 @@ app.get("/paper/view/:id", async (req, res) => {
     });
 
     // ✅ FINAL FIX
-    const pdfData =
-  paper.pdf?.buffer ||
-  paper.pdf?.data ||
-  paper.pdf;
+    const pdfData = paper.pdf;
 
-res.end(Buffer.from(pdfData));
+let bufferData;
+
+if (pdfData.buffer) {
+  bufferData = pdfData.buffer;
+} else if (pdfData.data) {
+  bufferData = Buffer.from(pdfData.data);
+} else {
+  bufferData = Buffer.from(pdfData);
+}
+
+res.end(bufferData);
 
   } catch (error) {
     console.error(error);
