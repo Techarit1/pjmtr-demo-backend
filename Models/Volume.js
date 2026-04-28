@@ -5,30 +5,40 @@ const paperSchema = new mongoose.Schema({
   abstract: String,
   keywords: String,
   authors: [{ name: String }],
-  publishedOn: { type: String },   // ✅ New field
-  publishedIn: { type: String },   // ✅ New field
+  publishedOn: { type: String },
+  publishedIn: { type: String },
   country: { type: String },
-   researchArea: {
+
+  researchArea: {
     type: String,
     trim: true
   },
+
   language: {
     type: String,
     trim: true
   },
+
   affiliationAddress: {
     type: String,
     trim: true
   },
+
   correspondingEmail: {
     type: String,
     trim: true,
-    lowercase: true      // ✅ New field
-  },// ✅ New field
-  pdf: { type: Buffer },           // store PDF in DB
+    lowercase: true
+  },
+
+  // 🔥 ADD THIS
+  views: {
+    type: Number,
+    default: 0
+  },
+
+  pdf: { type: Buffer },
   createdAt: { type: Date, default: Date.now }
 });
-
 const issueSchema = new mongoose.Schema({
   issueNumber: { type: Number, required: true },
   month: String,
