@@ -69,13 +69,29 @@ app.get("/paper/view/:id", async (req, res) => {
     }
 
     // 🔥 (VIEW COUNT)
-    await Volume.updateOne(
-      { "issues.papers._id": req.params.id },
-      { $inc: { "issues.$[].papers.$[p].views": 1 } },
-      {
-        arrayFilters: [{ "p._id": req.params.id }]
+   // 🔥 NEW VIEW COUNT (WORKING)
+let issueIndex = -1;
+let paperIndex = -1;
+
+volume.issues.forEach((issue, i) => {
+  issue.papers.forEach((p, j) => {
+    if (p._id.toString() === req.params.id) {
+      issueIndex = i;
+      paperIndex = j;
+    }
+  });
+});
+
+if (issueIndex !== -1 && paperIndex !== -1) {
+  await Volume.updateOne(
+    { _id: volume._id },
+    {
+      $inc: {
+        [`issues.${issueIndex}.papers.${paperIndex}.views`]: 1
       }
-    );
+    }
+  );
+}
 
     res.set({
       "Content-Type": "application/pdf",
