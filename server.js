@@ -68,27 +68,36 @@ app.get("/paper/view/:id", async (req, res) => {
       return res.status(404).send("PDF not found");
     }
 
-res.set({
-  "Content-Type": "application/pdf",
-  "Content-Disposition": "inline; filename=paper.pdf",
-});
+    // 🔥 (VIEW COUNT)
+    await Volume.updateOne(
+      { "issues.papers._id": req.params.id },
+      { $inc: { "issues.$[].papers.$[p].views": 1 } },
+      {
+        arrayFilters: [{ "p._id": req.params.id }]
+      }
+    );
 
-const pdfData = paper.pdf;
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "inline; filename=paper.pdf",
+    });
 
-let finalBuffer;
+    const pdfData = paper.pdf;
 
-// 🔥 HANDLE ALL CASES
-if (pdfData.buffer) {
-  finalBuffer = Buffer.from(pdfData.buffer);
-} else if (pdfData instanceof ArrayBuffer) {
-  finalBuffer = Buffer.from(pdfData);
-} else if (pdfData.data) {
-  finalBuffer = Buffer.from(pdfData.data);
-} else {
-  finalBuffer = Buffer.from(pdfData);
-}
+    let finalBuffer;
 
-res.end(finalBuffer);
+    // 🔥 HANDLE ALL CASES
+    if (pdfData.buffer) {
+      finalBuffer = Buffer.from(pdfData.buffer);
+    } else if (pdfData instanceof ArrayBuffer) {
+      finalBuffer = Buffer.from(pdfData);
+    } else if (pdfData.data) {
+      finalBuffer = Buffer.from(pdfData.data);
+    } else {
+      finalBuffer = Buffer.from(pdfData);
+    }
+
+    res.end(finalBuffer);
 
   } catch (error) {
     console.error(error);
