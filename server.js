@@ -10,7 +10,7 @@ const topBarRoutes = require("./routes/topBarroutes");
 const joinRoutes = require('./routes/Join.js'); // ✅ Correct import for join routes
 const path = require("path");
 
-
+const Volume = require("./Models/Volume"); // ✅ 🔥 ADD THIS (IMPORTANT)
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -42,7 +42,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/volumes", require("./routes/VolumeRoutes"));
 
-const Paper = require("./Models/Paper"); // 👈 ensure path correct
+const Paper = require("./Models/Paper"); // 👈 (same as before, untouched)
 
 app.get("/paper/view/:id", async (req, res) => {
   try {
@@ -73,14 +73,15 @@ app.get("/paper/view/:id", async (req, res) => {
       "Content-Disposition": "inline; filename=paper.pdf",
     });
 
-    // 🔥 FINAL FIX
-    res.end(Buffer.from(paper.pdf));
+    // ✅ FINAL FIX
+    res.end(paper.pdf.buffer);
 
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
   }
 });
+
 // ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
