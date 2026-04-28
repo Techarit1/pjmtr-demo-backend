@@ -48,6 +48,9 @@ app.get("/paper/view/:id", async (req, res) => {
   try {
     const paper = await Paper.findById(req.params.id);
 
+    console.log("ID:", req.params.id);
+    console.log("PAPER:", paper);
+
     if (!paper || !paper.pdf) {
       return res.status(404).send("PDF not found");
     }
@@ -57,7 +60,6 @@ app.get("/paper/view/:id", async (req, res) => {
       "Content-Disposition": "inline; filename=paper.pdf",
     });
 
-    // ✅ FIX
     res.end(Buffer.from(paper.pdf.data));
 
   } catch (error) {
@@ -65,7 +67,6 @@ app.get("/paper/view/:id", async (req, res) => {
     res.status(500).send("Server error");
   }
 });
-
 // ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
