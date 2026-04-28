@@ -30,13 +30,17 @@ const paperSchema = new mongoose.Schema({
     lowercase: true
   },
 
-  // 🔥 ADD THIS
-  views: {
-    type: Number,
-    default: 0
-  },
+ views: {
+  type: Number,
+  default: 0
+},
 
-  pdf: { type: Buffer },
+downloads: {
+  type: Number,
+  default: 0
+}, // ✅ comma add
+
+pdf: { type: Buffer },
   createdAt: { type: Date, default: Date.now }
 });
 const issueSchema = new mongoose.Schema({
