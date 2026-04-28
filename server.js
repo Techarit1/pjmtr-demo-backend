@@ -42,7 +42,28 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/volumes", require("./routes/VolumeRoutes"));
 
+const Paper = require("./models/Paper"); // 👈 ensure path correct
 
+app.get("/paper/view/:id", async (req, res) => {
+  try {
+    const paper = await Paper.findById(req.params.id);
+
+    if (!paper || !paper.pdf) {
+      return res.status(404).send("PDF not found");
+    }
+
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "inline; filename=paper.pdf",
+    });
+
+    res.end(paper.pdf.data);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
 
 // ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
