@@ -42,7 +42,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/volumes", require("./routes/VolumeRoutes"));
 
-const Paper = require("./models/Paper"); // 👈 ensure path correct
+const Paper = require("./Models/Paper"); // 👈 ensure path correct
 
 app.get("/paper/view/:id", async (req, res) => {
   try {
