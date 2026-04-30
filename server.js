@@ -24,8 +24,10 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
+//  JSON parsing
 app.use(express.json());
 
+//  API routes
 app.use('/api/news', newsRoutes);      
 app.use('/api/papers', paperRoutes);
 
@@ -34,6 +36,7 @@ app.use("/api/topbar", topBarRoutes);
 app.use('/api/join', joinRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Routes
 app.use("/api/volumes", require("./routes/VolumeRoutes"));
 
 const Paper = require("./Models/Paper");
